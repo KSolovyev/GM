@@ -413,7 +413,7 @@ Game.updateScores = function (players) {
 };
 
 Game.connect = (function () {
-    Game.socket = new WebSocket("ws://" + window.location.hostname + ":" + window.location.port + "/game");
+    Game.socket = new WebSocket("wss://" + window.location.hostname + ":" + window.location.port + "/game");
 
     Game.socket.onopen = function () {
         // Socket open.. start the game loop.
