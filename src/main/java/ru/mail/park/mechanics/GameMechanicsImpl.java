@@ -129,17 +129,16 @@ public class GameMechanicsImpl implements GameMechanics {
 
         gameTaskScheduler.tick();
 
-        final Iterator<GameSession> iterator = gameSessionService.getSessions().iterator();
         final List<GameSession> sessionsToTerminate = new ArrayList<>();
-        while (iterator.hasNext()) {
-            final GameSession session = iterator.next();
+        final List<GameSession> sessionsToFinish = new ArrayList<>();
+        for (GameSession session : gameSessionService.getSessions()) {
             if (session.tryFinishGame()) {
-                gameSessionService.forceTerminate(session, false);
+                sessionsToFinish.add(session);
                 continue;
             }
 
             if (!gameSessionService.checkHealthState(session)) {
-                gameSessionService.forceTerminate(session, true);
+                sessionsToTerminate.add(session);
                 continue;
             }
 
@@ -152,6 +151,7 @@ public class GameMechanicsImpl implements GameMechanics {
             pullTheTriggerService.pullTheTriggers(session);
         }
         sessionsToTerminate.forEach(session -> gameSessionService.forceTerminate(session, true));
+        sessionsToFinish.forEach(session -> gameSessionService.forceTerminate(session, false));
 
         tryStartGames();
         clientSnapshotsService.clear();
