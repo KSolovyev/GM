@@ -54,7 +54,7 @@ public class GameSocketHandler extends TextWebSocketHandler {
     }
 
     @Override
-    protected void handleTextMessage(WebSocketSession webSocketSession, TextMessage message) throws AuthenticationException {
+    protected void handleTextMessage(WebSocketSession webSocketSession, TextMessage message) {
         if (!webSocketSession.isOpen()) {
             return;
         }
